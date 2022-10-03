@@ -64,6 +64,7 @@ export default defineComponent({
     };
   },
   async created() {
+    this.consumoAtual = (await this.$api.get("/tempoReal")).data;
     setInterval(async () => {
       this.consumoAtual = (await this.$api.get("/tempoReal")).data;
     }, 2500);
