@@ -2,8 +2,30 @@
   <q-page class="q-py-md q-px-sm">
     <div class="fit text-center">
       <h4 class="q-ma-sm">TEMPO REAL</h4>
+      Proxima leitura em {{ cont }}
+      <q-dialog
+        seamless
+        no-esc-dismiss
+        allow-focus-outside
+        v-model="desatualizado"
+        position="bottom"
+      >
+        <q-card style="width: 100%">
+          <q-banner
+            v-if="desatualizado"
+            dense
+            class="bg-grey-3 q-py-sm text-center"
+          >
+            Não há leituras recentes, verifique se o dipositivo está ligado e
+            conectado a internet.
+            <template v-slot:avatar>
+              <q-icon class="q-pl-md" name="signal_wifi_off" color="primary" />
+            </template>
+          </q-banner>
+        </q-card>
+      </q-dialog>
     </div>
-    <div class="col-auto row justify-center" v-if="consumoAtual">
+    <div style="padding-bottom: 80px" class="col-auto row justify-center">
       <div class="custom-gauge row justify-center text-center">
         <h5 class="q-my-xs">Voltagem</h5>
         <q-knob
@@ -60,16 +82,35 @@ export default defineComponent({
   name: "IndexPage",
   data() {
     return {
-      consumoAtual: null,
+      cont: 15,
+      interval: null,
+      consumoAtual: {
+        potencia: 0,
+        voltagem: 0,
+        corrente: 0,
+        desatualizado: false,
+      },
+      desatualizado: false,
     };
   },
   async created() {
     this.consumoAtual = (await this.$api.get("/tempoReal")).data;
-    setInterval(async () => {
-      this.consumoAtual = (await this.$api.get("/tempoReal")).data;
-    }, 2500);
+    this.setConsumoInterval();
   },
-  methods: {},
+  methods: {
+    async setConsumoInterval() {
+      this.cont = 15;
+      this.interval = setInterval(async () => {
+        this.cont -= 1;
+        if (this.cont <= 0) {
+          clearInterval(this.interval);
+          this.consumoAtual = (await this.$api.get("/tempoReal")).data;
+          this.desatualizado = this.consumoAtual.desatualizado ? true : false;
+          this.setConsumoInterval();
+        }
+      }, 1000);
+    },
+  },
 });
 </script>
 

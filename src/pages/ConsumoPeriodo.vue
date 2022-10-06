@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-py-md q-px-sm">
     <div class="fit text-center">
-      <h4 class="q-ma-sm">CONSUMO POR PERIODO</h4>
+      <h4 class="q-ma-sm">POR PERIODO</h4>
       <q-stepper
         flat
         :vertical="$q.screen.lt.md"

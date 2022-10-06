@@ -1,8 +1,8 @@
 {
-  "name": "TCC-cliente",
+  "name": "tcc-cliente",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "ApsProject",
+  "productName": "Monitoramento De Conusmo",
   "author": "Paulo <paulocerdeira1999@gmail.com>",
   "private": true,
   "scripts": {
