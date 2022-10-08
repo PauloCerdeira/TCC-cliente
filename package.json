@@ -2,7 +2,7 @@
   "name": "tcc-cliente",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Monitoramento De Conusmo",
+  "productName": "Monitoramento De Consumo",
   "author": "Paulo <paulocerdeira1999@gmail.com>",
   "private": true,
   "scripts": {

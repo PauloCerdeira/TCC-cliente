@@ -59,12 +59,11 @@
               "
               :locale="ptBrLocale"
               v-model="dataFinal"
-              @update:model-value="validaHoraRelDia()"
               mask="YYYY-MM-DD HH:mm"
             />
             <q-time
-              :hour-options="hourOptions"
-              :minute-options="minuteOptions"
+              :hour-options="validaHoraRelDia()"
+              :minute-options="validaMinRelHora()"
               format24h
               v-model="dataFinal"
               mask="YYYY-MM-DD HH:mm"
@@ -119,7 +118,10 @@ export default defineComponent({
       step: ref(1),
       dataInicial: null,
       dataFinal: null,
-      hourOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      hourOptions: [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24,
+      ],
       minuteOptions: [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
         20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
@@ -196,16 +198,48 @@ export default defineComponent({
     //   }
     //   return true;
     // },
+
     validaHoraRelDia() {
+      // if (
+      //   this.dataFinal &&
+      //   this.dataInicial.substring(0, 10) == this.dataFinal.substring(0, 10)
+      // ) {
+      //   this.dataFinal = date.formatDate(
+      //     date.addToDate(this.dataInicial, { minute: 1 }),
+      //     "YYYY-MM-DD HH:mm"
+      //   );
+      // }
       if (
         this.dataFinal &&
         this.dataInicial.substring(0, 10) == this.dataFinal.substring(0, 10)
       ) {
-        this.dataFinal = date.formatDate(
-          date.addToDate(this.dataInicial, { minute: 1 }),
-          "YYYY-MM-DD HH:mm"
+        return this.hourOptions.slice(
+          parseInt(this.dataInicial.substring(11, 13))
         );
       }
+      return this.hourOptions;
+    },
+    validaMinRelHora() {
+      if (
+        this.dataFinal &&
+        this.dataInicial.substring(0, 10) == this.dataFinal.substring(0, 10) &&
+        this.dataInicial.substring(11, 13) == this.dataFinal.substring(11, 13)
+      ) {
+        this.dataFinal = date.formatDate(
+          date.addToDate(this.dataInicial, { minutes: 1 }),
+          "YYYY-MM-DD HH:mm"
+        );
+        console.log(parseInt(this.dataInicial.substring(14, 16)) + 1);
+        console.log(
+          this.minuteOptions.slice(
+            parseInt(this.dataInicial.substring(14, 16)) + 1
+          )
+        );
+        return this.minuteOptions.slice(
+          parseInt(this.dataInicial.substring(14, 16)) + 1
+        );
+      }
+      return this.minuteOptions;
     },
     setDataInicial() {
       this.dataFinal = date.formatDate(
