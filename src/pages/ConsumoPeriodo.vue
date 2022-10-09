@@ -83,6 +83,7 @@
               :events="dataInicialEvent"
               v-model="dataFinal"
               mask="YYYY-MM-DD HH:mm"
+              today-btn
             />
             <q-time
               @update:model-value="(value) => validaDataFinal(value)"
@@ -116,6 +117,22 @@
           icon="data_thresholding"
           :header-nav="step > 3"
         >
+          <q-btn
+            flat
+            @click="teste()"
+            color="primary"
+            :label="
+              !lineChartOptions.dataLabels.enabled
+                ? 'Mostrar Dados'
+                : 'Esconder Dados'
+            "
+            class="q-ml-sm"
+            :icon="
+              lineChartOptions.dataLabels.enabled
+                ? 'visibility_off'
+                : 'visibility'
+            "
+          />
           <apexchart
             type="line"
             height="350"
@@ -210,11 +227,25 @@ export default defineComponent({
       lineChartSeries: [],
       lineChartOptions: {
         chart: {
+          id: "linechart",
           type: "line",
           width: "100%",
         },
         dataLabels: {
           enabled: false,
+          formatter: function (val, opts) {
+            switch (opts.seriesIndex) {
+              case 0:
+                return val + "Watts";
+              case 1:
+                return val + " Volts";
+              case 2:
+                return val + " Ampères";
+
+              default:
+                return val;
+            }
+          },
         },
         stroke: {
           curve: "smooth",
@@ -240,6 +271,11 @@ export default defineComponent({
     this.minuteOptionsAvaiable = this.minuteOptions;
   },
   methods: {
+    teste() {
+      this.lineChartOptions.dataLabels.enabled =
+        !this.lineChartOptions.dataLabels.enabled;
+      ApexCharts.exec("linechart", "updateOptions", this.lineChartOptions);
+    },
     async getConsumoPeriodo() {
       this.periodoResults = (
         await this.$api.get("/periodo", {
@@ -310,5 +346,8 @@ export default defineComponent({
 }
 .q-stepper--vertical .q-stepper__step-inner {
   padding: 0px 0px 0px 0px !important;
+}
+.q-stepper__step-inner {
+  max-width: 100% !important;
 }
 </style>

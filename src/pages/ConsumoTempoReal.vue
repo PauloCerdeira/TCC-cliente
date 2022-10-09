@@ -29,24 +29,27 @@
       <div class="custom-gauge row justify-center text-center">
         <h5 class="q-my-xs">Voltagem</h5>
         <q-knob
+          show-value
           readonly
           :min="0"
-          :max="1000"
+          :max="220"
           v-model="consumoAtual.voltagem"
-          show-value
           size="150px"
           :thickness="0.22"
           color="teal"
           track-color="grey-3"
           class="q-ma-md"
-        />
+          font-size="30px"
+        >
+          {{ consumoAtual.voltagem }} Volts
+        </q-knob>
       </div>
       <div class="custom-gauge row justify-center text-center">
         <h5 class="q-my-xs">Corrente</h5>
         <q-knob
           readonly
           :min="0"
-          :max="1000"
+          :max="100"
           v-model="consumoAtual.corrente"
           show-value
           size="150px"
@@ -54,14 +57,17 @@
           color="teal"
           track-color="grey-3"
           class="q-ma-md"
-        />
+          font-size="30px"
+        >
+          {{ consumoAtual.corrente }} Ampères
+        </q-knob>
       </div>
       <div class="custom-gauge row justify-center text-center">
         <h5 class="q-my-xs">Potencia</h5>
         <q-knob
           readonly
           :min="0"
-          :max="1000"
+          :max="1200"
           v-model="consumoAtual.potencia"
           show-value
           size="150px"
@@ -69,7 +75,9 @@
           color="teal"
           track-color="grey-3"
           class="q-ma-md"
-        />
+          font-size="30px"
+          >{{ consumoAtual.potencia }} Watts
+        </q-knob>
       </div>
     </div>
   </q-page>
