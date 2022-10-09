@@ -119,7 +119,7 @@
         >
           <q-btn
             flat
-            @click="teste()"
+            @click="atualizarTabela('toggle_mostrar_dados')"
             color="primary"
             :label="
               !lineChartOptions.dataLabels.enabled
@@ -133,6 +133,22 @@
                 : 'visibility'
             "
           />
+          <!-- <q-btn
+            flat
+            @click="atualizarTabela('toggle_theme_mode')"
+            color="primary"
+            :label="
+              lineChartOptions.theme.mode == 'light'
+                ? 'Tema escuro'
+                : 'Tema Claro'
+            "
+            class="q-ml-sm"
+            :icon="
+              lineChartOptions.theme.mode == 'light'
+                ? 'visibility_off'
+                : 'visibility'
+            "
+          /> -->
           <apexchart
             type="line"
             height="350"
@@ -241,11 +257,14 @@ export default defineComponent({
                 return val + " Volts";
               case 2:
                 return val + " Ampères";
-
               default:
                 return val;
             }
           },
+          offsetY: -10,
+        },
+        theme: {
+          mode: "light",
         },
         stroke: {
           curve: "smooth",
@@ -271,9 +290,20 @@ export default defineComponent({
     this.minuteOptionsAvaiable = this.minuteOptions;
   },
   methods: {
-    teste() {
-      this.lineChartOptions.dataLabels.enabled =
-        !this.lineChartOptions.dataLabels.enabled;
+    atualizarTabela(action) {
+      switch (action) {
+        case "toggle_mostrar_dados":
+          this.lineChartOptions.dataLabels.enabled =
+            !this.lineChartOptions.dataLabels.enabled;
+          break;
+        case "toggle_theme_mode":
+          this.lineChartOptions.theme.mode =
+            this.lineChartOptions.theme.mode == "light" ? "dark" : "light";
+          break;
+        default:
+          return;
+      }
+
       ApexCharts.exec("linechart", "updateOptions", this.lineChartOptions);
     },
     async getConsumoPeriodo() {
